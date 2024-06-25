@@ -7,40 +7,56 @@ import axios from 'axios';
 
 
 export default function Body() {
-    const [inputFile, setInputFile] = useState()
-    const [outputFile, setOutputFile] = useState()
+    const [inputFiles, setInputFiles] = useState([])
+    // const [outputFile, setOutputFile] = useState()
     
 
     function handleFile(event){
-        setInputFile(event.target.files[0]);
-        if (inputFile){
-            console.log(inputFile);
-        }
-        
+        setInputFiles(event.target.files);
+        console.log(inputFiles)
     }
 
     function handleUpload(){
+        console.log('process');
         const formData = new FormData();
-        formData.append("file", inputFile);
+        for (let i = 0; i < inputFiles.length; i++){
+            formData.append("files", inputFiles[i])
+        }
 
-        axios.post("http://localhost:5000/get-inference", formData)
+        const url = "https://working-tetra-miserably.ngrok-free.app/get-inference"
+        axios.post(url, formData)
         .then(data => {
-            setOutputFile(data)
             console.log(data)
-            console.log(outputFile)
         });
     }
 
+    function handleDownload(){
+        console.log('downloading ...')
+        const url = `https://working-tetra-miserably.ngrok-free.app/download`
+        fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'file';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url)
+            });
+        }
+    
+
   return (
     <div className="parent">
-        <div className="Body" onLoad={() => setInputFile('')}>
+        <div className="Body">
         <h2 className="Upload-title">Upload Your File Here: </h2>
         <div className="File-upload">
             <div className="input-container">
                 <div className="UploadText">Drag and Drop or Click on the Box to Upload Your Files</div>
-                {/* <p>{file}</p> */}
                 <form>
-                    <input type="file" className="file" onChange={handleFile}/>
+                    <input type="file" multiple className="file" onChange={handleFile}/>
                 </form>
             </div>          
         </div>    
@@ -51,9 +67,9 @@ export default function Body() {
             <h1>Output</h1>
 
             <div className="Output-container">
-                <p>hi</p>
-                <p>hello</p>
-
+                <button onClick={() => handleDownload()}>
+                    Download Segmentations
+                </button>
             </div>
         </div>
     </div>
