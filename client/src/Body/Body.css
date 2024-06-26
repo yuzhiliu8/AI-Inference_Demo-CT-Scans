@@ -60,10 +60,14 @@ h2{
 
 }
 
-.Output-container{
+.Output-button{
     background: lightblue;
     margin: 2vh 40vh;
-    padding: 5vh 0vh;
-    border: 3px dashed black;
+    padding: 5vh 5vh;
+    border: 3px solid black;
     border-radius: 25px;
+}
+
+.Output-button:hover{
+    background-color: #99C4DC;
 }

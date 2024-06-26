@@ -8,8 +8,8 @@ import axios from 'axios';
 
 export default function Body() {
     const [inputFiles, setInputFiles] = useState([])
-    // const [outputFile, setOutputFile] = useState()
-    
+    const domain = 'https://settling-prawn-daily.ngrok-free.app';
+    // const domain = `http://localhost:5000`;
 
     function handleFile(event){
         setInputFiles(event.target.files);
@@ -23,28 +23,30 @@ export default function Body() {
             formData.append("files", inputFiles[i])
         }
 
-        const url = "https://working-tetra-miserably.ngrok-free.app/get-inference"
+        const url = `${domain}/get-inference`
         axios.post(url, formData)
         .then(data => {
-            console.log(data)
+            console.log(data['Message'])
         });
     }
 
-    function handleDownload(){
-        console.log('downloading ...')
-        const url = `https://working-tetra-miserably.ngrok-free.app/download`
-        fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'file';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url)
-            });
+    function handleDownload() {
+        console.log('downloading ...') 
+        axios.post(`${domain}/download`, 'testString', {responseType: 'blob'})
+        .then((res) => {
+            console.log(res.data)
+            const url = window.URL.createObjectURL(
+                new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute(
+            'download',
+            'segmentations.zip',
+            );
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        });
         }
     
 
@@ -66,11 +68,9 @@ export default function Body() {
         <div className="Output">
             <h1>Output</h1>
 
-            <div className="Output-container">
-                <button onClick={() => handleDownload()}>
-                    Download Segmentations
-                </button>
-            </div>
+            <button className="Output-button" onClick={() => handleDownload()}>
+                Download Segmentations
+            </button>
         </div>
     </div>
     
