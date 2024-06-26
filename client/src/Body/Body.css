@@ -12,6 +12,11 @@ h2{
     padding:2vh;
 }
 
+h3{
+    margin:0;
+    padding:2vh;
+}
+
 .input-container {
     display:grid;
     grid-template-columns: auto;
@@ -55,9 +60,9 @@ h2{
     background: white;
     margin-right:8%;
     margin-left:8%;
-    margin-bottom: 2%;
-    padding:2%
-
+    margin-bottom:1%;
+    padding:2%;
+    min-height: 10vh;
 }
 
 .Output-button{
@@ -66,6 +71,7 @@ h2{
     padding: 5vh 5vh;
     border: 3px solid black;
     border-radius: 25px;
+    display:none;
 }
 
 .Output-button:hover{

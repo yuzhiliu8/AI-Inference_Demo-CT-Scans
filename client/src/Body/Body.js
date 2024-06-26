@@ -7,7 +7,8 @@ import axios from 'axios';
 
 
 export default function Body() {
-    const [inputFiles, setInputFiles] = useState([])
+    const [inputFiles, setInputFiles] = useState([]);
+    const [msg, setMsg] = useState (' ');
     const domain = 'https://settling-prawn-daily.ngrok-free.app';
     // const domain = `http://localhost:5000`;
 
@@ -22,12 +23,19 @@ export default function Body() {
         for (let i = 0; i < inputFiles.length; i++){
             formData.append("files", inputFiles[i])
         }
+        setMsg("Loading...")
 
         const url = `${domain}/get-inference`
         axios.post(url, formData)
         .then(data => {
             console.log(data['Message'])
+        })
+        .then(
+            () => {
+                document.getElementById("Output-button").style.display = "inline";
+                setMsg("Ready to Download!");
         });
+        
     }
 
     function handleDownload() {
@@ -65,10 +73,14 @@ export default function Body() {
         <button className="Inference-button" onClick={handleUpload}>Process</button>
         
         </div>
-        <div className="Output">
+        <div className="Output" id="Output">
             <h1>Output</h1>
 
-            <button className="Output-button" onClick={() => handleDownload()}>
+            <div className="Output-label">{msg}</div>
+            <br/>
+
+
+            <button className="Output-button" id="Output-button" onClick={() => handleDownload()}>
                 Download Segmentations
             </button>
         </div>
