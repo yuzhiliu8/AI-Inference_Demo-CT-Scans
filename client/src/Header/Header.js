@@ -8,7 +8,7 @@ export default function Header() {
     <div className="Header">
         <h1>{title}</h1>
         <h3>Upload CT Scan Files and Press Process to Analyze!</h3>
-        <a href={githubLink}>Check out the GitHub Repo!</a>
+        <a href={githubLink} target="_blank" rel="noreferrer" >Check out the GitHub Repo!</a>
       </div>
   )
 }
